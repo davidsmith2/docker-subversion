@@ -1,31 +1,39 @@
 # docker-subversion
 
-Creates a Subversion server on Ubuntu with Docker.
+Creates an Apache Subversion server on Ubuntu with Docker.
 
-To create the machine:
-```
-docker-machine create --driver virtualbox subversion
-docker-machine env subversion
-eval $(docker-machine env subversion)
-```
-
-To build the image:
+To build the Docker image:
 ```
 sh ./build.sh
 ```
 
-To run the container:
+To run the Docker container:
 ```
 sh ./run.sh
 ```
 
-To add a user:
+To enter the Docker container:
 ```
 docker exec -it [CONTAINER_ID] bash
-htpasswd -c /etc/subversion/passwd user
 ```
 
-To checkout the project:
+To add the first Subversion user:
 ```
-svn co http://localhost:8081/svn/myproject myproject --username user
+htpasswd -c /etc/subversion/passwd user1
+```
+
+To add subsequent Subversion users:
+```
+htpasswd /etc/subversion/passwd user2
+htpasswd /etc/subversion/passwd user3
+```
+
+To checkout the project with an SVN client:
+```
+svn checkout http://localhost:8081/svn/myproject myproject --username [USER]
+```
+
+To checkout the project with a Git client:
+```
+git svn clone http://localhost:8081/svn/myproject/trunk myproject --username [USER]
 ```
